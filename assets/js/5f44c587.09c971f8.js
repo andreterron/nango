@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[345],{6715:e=>{e.exports=JSON.parse('{"title":"SDKs","description":"Reference for the Nango SDKs.","slug":"/category/sdks","permalink":"/category/sdks","navigation":{"previous":{"title":"Actions","permalink":"/reference/actions"},"next":{"title":"SDK: Node","permalink":"/reference/SDKs/node"}}}')}}]);
