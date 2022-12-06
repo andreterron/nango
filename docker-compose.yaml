@@ -1,40 +1,15 @@
 version: '3.9'
 services:
-    nango-db:
-        image: postgres
-        container_name: nango-db
-        restart: always
-        environment:
-            POSTGRES_PASSWORD: nango
-            POSTGRES_USER: nango
-            POSTGRES_DB: nango
-        ports:
-            - '5432:5432'
-        networks:
-            - nango
-
-    nango-db-admin:
-        image: adminer
-        container_name: nango-db-admin
-        restart: always
-        ports:
-            - '8080:8080'
-        networks:
-            - nango
-
     nango-server:
         image: nangohq/server
         container_name: nango-server
         restart: always
-        environment:
-            - TEMPORAL_ADDRESS=temporal:7233
         env_file:
             - .env
         ports:
             - '3003:3003'
         depends_on:
             - temporal
-            - nango-db
         networks:
             - nango
 
@@ -42,29 +17,19 @@ services:
         image: nangohq/worker
         container_name: nango-worker
         restart: always
-        environment:
-            - TEMPORAL_ADDRESS=temporal:7233
-            - PIZZLY_BASE_URL=http://localhost:3004 # Only needed if you are using Pizzly for OAuth.
         env_file:
             - .env
         ports:
             - '3004:3004'
         depends_on:
             - temporal
-            - nango-db
         networks:
             - nango
 
     temporal:
         container_name: temporal
-        depends_on:
-            - nango-db
-        environment:
-            - DB=postgresql
-            - DB_PORT=5432
-            - POSTGRES_USER=nango
-            - POSTGRES_PWD=nango
-            - POSTGRES_SEEDS=nango-db
+        env_file:
+            - .env
         image: temporalio/auto-setup:1.18.4
         ports:
             - 7233:7233
